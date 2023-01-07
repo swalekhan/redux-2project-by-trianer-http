@@ -1,8 +1,17 @@
+import { useDispatch } from 'react-redux';
 import classes from './CartItem.module.css';
+import { cardRedActions } from '../../store/cardReducer';
 
 const CartItem = (props) => {
+  const dispatch = useDispatch()
   const { title, quantity, total, price } = props.item;
 
+  const removeItemHandler = () =>{
+        dispatch(cardRedActions.removeItem(title))  // we set tilte in place of id for now;
+  }
+  const addItemHandler = () => {
+    dispatch(cardRedActions.addItem({title:title,quantity:1,price:price}))
+  }
   return (
     <li className={classes.item}>
       <header>
@@ -17,8 +26,8 @@ const CartItem = (props) => {
           x <span>{quantity}</span>
         </div>
         <div className={classes.actions}>
-          <button>-</button>
-          <button>+</button>
+          <button onClick={removeItemHandler}>-</button>
+          <button onClick={addItemHandler}>+</button>
         </div>
       </div>
     </li>
