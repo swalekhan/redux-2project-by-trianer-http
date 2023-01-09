@@ -2,9 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const cardReducerSlice = createSlice({
     name:"cardReducer",
-    initialState:{cardRedState:[], totalAmount:0, totalQuantity:0},
+    initialState:{cardRedState:[], totalAmount:0, totalQuantity:0, cardIsChanged:false},
     reducers:{
+        replceData(state, action){
+          state.cardRedState = action.payload.cardRedState?action.payload.cardRedState:[];
+          state.totalQuantity = action.payload.totalQuantity;
+          state.totalAmount = action.payload.totalAmount;
+        },
+
         addItem(state, actions){
+            state.cardIsChanged = true;
             state.totalQuantity++;
         const totalAmount = state.totalAmount + actions.payload.quantity * actions.payload.price;
          const existItemIndex = state.cardRedState.findIndex((e)=>e.title === actions.payload.title);
@@ -26,7 +33,8 @@ const cardReducerSlice = createSlice({
 
 
         removeItem(state, actions){
-            state.totalQuantity--;
+            state.cardIsChanged = true;
+            state.totalQuantity--; // you can do like this
             const existItemIndex = state.cardRedState.findIndex((e)=>e.title === actions.payload);
             const existItem = state.cardRedState[existItemIndex];
             const totalAmount = state.totalAmount - existItem.price;
